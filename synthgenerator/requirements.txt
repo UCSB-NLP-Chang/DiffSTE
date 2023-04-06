@@ -1,0 +1,7 @@
+matplotlib==3.6.3
+numpy==1.24.1
+omegaconf==2.3.0
+Pillow==9.4.0
+synthtiger==1.2.1
+tqdm==4.64.1
+pandas==1.5.3

@@ -1,0 +1,169 @@
+coord_output: true
+mask_output: true
+glyph_coord_output: true
+glyph_mask_output: true
+
+vertical: false
+
+BASE_DIR: ./
+RESOURCE_DIR: ${BASE_DIR}/resources
+visibility_check: true
+
+level: 2
+
+corpus:
+  paths: ["${RESOURCE_DIR}/corpus/wikicorpus.json"]
+  weights: [1]
+  min_length: 1
+  max_length: 25
+  textcase: [lower, upper, capitalize]
+
+word_sampler:
+  max_num: 5
+  max_len: 16
+  corpus_conf:
+    ${corpus}
+
+font:
+  paths: ["${RESOURCE_DIR}/100fonts"]
+  weights: [1]
+  size: [30, 80]
+  bold: 0.0
+  mode: same
+
+named_color:
+  mode: same
+  pallate_name: XKCD
+
+color:
+  rgb: [[0, 256], [0, 256], [0, 256]]
+  alpha: [1, 1]
+  grayscale: 0
+
+colormap2:
+  paths: ["${RESOURCE_DIR}/colormap/iiit5k_gray.txt"]
+  weights: [1]
+  k: 2
+  alpha: [1, 1]
+  colorize: 1
+
+colormap3:
+  paths: ["${RESOURCE_DIR}/colormap/iiit5k_gray.txt"]
+  weights: [1]
+  k: 3
+  alpha: [1, 1]
+  colorize: 1
+
+shape:
+  prob: 0
+  args:
+    weights: [1, 1]
+    args:
+      # elastic distortion
+      - alpha: [15, 30]
+        sigma: [4, 12]
+      # elastic distortion
+      - alpha: [0, 2]
+        sigma: [0, 0.6]
+  
+style:
+  prob: 0
+  args:
+    weights: [1, 0, 0]
+    args:
+      # text border
+      - size: [1, 5]
+        alpha: [1, 1]
+        grayscale: 0
+      # text shadow
+      - distance: [2, 4]
+        angle: [0, 360]
+        alpha: [0.3, 0.7]
+        grayscale: 0
+      # text extrusion 
+      - length: [2, 5]
+        angle: [0, 360]
+        rgb: [[0, 0], [0, 0], [0, 0]]
+        grayscale: 0
+
+pad:
+  prob: 1
+  args:
+    pxs: [[2, 10], [2, 10], [2, 10], [2, 10]]
+
+texture:
+  prob: 1.
+  args:
+    paths: ["${BASE_DIR}/../ocr-dataset/SynthText/bg_data/bg_img"]
+    weights: [1]
+    alpha: [0.7, 1]
+    grayscale: 0
+    crop: 1
+
+layout:
+  space: [4, 8]
+  line_space: [1, 5]
+  align: [left, "center", "right"]
+  line_align: [left]
+  ltr: true
+  ttb: true
+  vertical: false
+
+text_layout:
+  space: [5, 10]
+  line_space: [3, 10]
+  align: [left]
+  line_align: [top, bottom, middle]
+  ltr: true
+  ttb: true
+  vertical: true
+
+transform:
+  prob: 0.8
+  args:
+    # weights: [1, 1, 1, 1, 1, 1, 1., 1.]
+    weights: [0, 0, 0, 0, 0, 0, 1., 1.]
+    args:
+      # perspective x
+      - percents: [[0.5, 1], [1, 1]]
+        aligns: [[0, 0], [0, 0]]
+      # perspective y
+      - percents: [[1, 1], [0.5, 1]]
+        aligns: [[0, 0], [0, 0]]
+      # trapezoidate x # don't use
+      - weights: [1, 0, 1, 0]
+        percent: [0.8, 1]
+        align: [-1, 1]
+      # trapezoidate y # don't use
+      - weights: [0, 1, 0, 1]
+        percent: [0.5, 1]
+        align: [-1, 1]
+      # skew x
+      - weights: [1, 0]
+        angle: [0, 20]
+        ccw: 0.5
+      # skew y
+      - weights: [0, 1]
+        angle: [0, 20]
+        ccw: 0.5
+      # rotate
+      - angle: [0, 30]
+        ccw: 0.5
+      - angle: [-90, -15, 15, 90]
+        ccw: 0.5
+
+
+postprocess:
+  args:
+    # gaussian noise
+    - prob: 0.5
+      args:
+        scale: [0, 0.5]
+        per_channel: 0
+    # gaussian blur
+    - prob: 0.0
+      args:
+        sigma: [0, 1]
+    - prob: 0.0
+      args:
+        k: [1, 1]
