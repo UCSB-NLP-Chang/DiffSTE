@@ -10,7 +10,7 @@
 <sup>1</sup>UC, Santa Barbara, <sup>2</sup>Adobe Research
 
 
-This is the official implementation of the paper "Improving Diffusion Models for Scene Text Editing with Dual Encoders" \[[Arxiv]()\].
+This is the official implementation of the paper "Improving Diffusion Models for Scene Text Editing with Dual Encoders" \[[Arxiv](https://arxiv.org/abs/2304.05568)\].
 
 ## Overview
 In this work, we propose a novel Diffusion-based Scene Text Editing (DiffSTE) framework, which is able to edit scene text into different font styles and colors following given text instruction. Specifically, we propose to improve pre-trained diffusion models with a dual encoder design, which includes a character encoder for better text legibility and an instruction encoder for better style control. We then utilize an instruction tuning framework to train our model learn the mapping from the text instruction to the corresponding image with either the specified style or the style of the surrounding texts in the background. 
@@ -30,7 +30,7 @@ Our pretrained model can be downloaded from [here](https://drive.google.com/file
 ## Generation samples
 
 ### Scene text editing
-Run following command to edit scene text. The mask file indicates the region where generated text locates.
+Run following command to edit scene text. The mask file indicates the region where the generated text locates.
 ```bash
 python generate.py --ckpt_path ${model_path} --in_image examples/sample0.png --in_mask examples/mask0.png --text wizards --output_dir ${output_dir}
 ```
@@ -47,7 +47,7 @@ You should be able to get a similar result:
 
 <img src="assets/stylecond.png" width="400">
 
-Edit scene text using a natural language instruction.
+Specify the text style with a natural language instruction.
 ```bash
 python generate.py --ckpt_path ${model_path} --in_image examples/sample2.png --in_mask examples/mask2.png --text STAFF --instruction "The word \"STAFF\" is colored in a delicate, ladylike shade of lilac"" --output_dir ${output_dir}
 ```
@@ -56,7 +56,7 @@ You should be able to get a similar result:
 <img src="assets/naturallang.png" width="400">
 
 ### Font variation
-Generate text with unseen font variation, e.g. italic and bold.
+Generate text with unseen font variation, e.g. italic and bold. Notice that NovaMono font has no italic and bold version from google-fonts library.
 ```bash
 python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono --output_dir ${output_dir}
 python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono-Italic --output_dir ${output_dir}
@@ -67,7 +67,7 @@ You should be able to get similar results:
 
 <img src="assets/font-extro.png" width="600">
 
-Mix two different fonts:
+Mix two different font styles.
 ```bash
 python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font Allura --output_dir ${output_dir}
 python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font Mohave --output_dir ${output_dir}
@@ -79,7 +79,7 @@ You should be able to get similar results:
 <img src="assets/font-intro.png" width="500">
 
 ## Train the model
-You can train the model on a combination of real world data and synthetic data. 
+You can train the model on a combination of real world scene text data and synthetic scene text data.
 ### Prepare Data 
 1. Download real world dataset: 
 ```bash
@@ -90,7 +90,7 @@ sh scripts/down_data.sh
 pip install -r synthgenerator/requirements.txt
 sh scripts/gen_synth.sh
 ```
-Notice that you may need to first download fonts from google fonts library, we include a list of font names we used in `synthgenerator/resources/100fonts` and background images from [SynthText](https://github.com/ankush-me/SynthText).
+Notice that you may need to first download fonts from google fonts library, we include a list of font names for our released model in `synthgenerator/resources/100fonts` and background images from [SynthText Project](https://github.com/ankush-me/SynthText).
 
 The donwloaded real world data and synthetic data will be in folder `data/ocr-dataset`.
 
@@ -103,9 +103,17 @@ Logs and model will be saved in `${log_directory}/${project_name}/${time}_${run_
 An example config file is in `configs` folder, which defines the hyper parameter and other information required for training.
 
 ## Reference
-Our code use `pytorch-lightning` as the main training framework and `diffusers` for loading pre-trained model weights. We mainly follow the implementation of [stable-diffusion](https://github.com/runwayml/stable-diffusion).
+Our code use `pytorch-lightning` as the main framework and `diffusers` for loading pretrained stable-diffusion model. We mainly follow the implementation of [stable-diffusion](https://github.com/runwayml/stable-diffusion).
 
 ## Citation
 If you find our work useful in your research, please consider citing our paper:
 ```bibtex
+@misc{ji2023improving,
+      title={Improving Diffusion Models for Scene Text Editing with Dual Encoders}, 
+      author={Jiabao Ji and Guanhua Zhang and Zhaowen Wang and Bairu Hou and Zhifei Zhang and Brian Price and Shiyu Chang},
+      year={2023},
+      eprint={2304.05568},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 ```

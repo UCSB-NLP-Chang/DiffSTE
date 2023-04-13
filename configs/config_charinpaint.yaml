@@ -19,7 +19,7 @@ data:
           mask_image_ratio: 15
         rotate:
           cat_prob: [1, 0, 0]
-          angle_list: [-15, -30, -45, -60, -90, 15, 30, 45, 60, 90] 
+          angle_list: [-15, -30, -45, -60, -90, 15, 30, 45, 60, 90]
           rotate_range: 90
 
     dataconfs:
@@ -32,22 +32,21 @@ data:
         type: scene
         label_path: ${data.scene_data}/COCO/cocotext.v2.json
         image_dir: ${data.scene_data}/COCO/train2014/
-  
+
       TextOCR:
         type: scene
         label_path: ${data.scene_data}/TextOCR/TextOCR_0.1_train.json
         image_dir: ${data.scene_data}/TextOCR/train_images/
-      
+
       Synthtiger:
         type: synth
-        label_path: ${data.synth_data}/train_data.csv 
+        label_path: ${data.synth_data}/train_data.csv
         image_dir: ${data.synth_data}/
         style_mode: same-same
         use_textbbox: false
         style_dropout: [0.5, 0.5]
         rand_mask_text: true
 
-  
   validation:
     size: 256
     # max_num: 6400 # diffly choose this number
@@ -63,7 +62,7 @@ data:
           mask_image_ratio: 30
         rotate:
           cat_prob: [1, 0, 0]
-          angle_list: [-15, -30, -45, -60, -90, 15, 30, 45, 60, 90] 
+          angle_list: [-15, -30, -45, -60, -90, 15, 30, 45, 60, 90]
           rotate_range: 90
 
     dataconfs:
@@ -71,16 +70,16 @@ data:
         type: scene
         label_path: ${data.scene_data}/ArT/val_split.json
         image_dir: ${data.scene_data}/ArT/train_images/
-      
+
       COCO:
         type: scene
         label_path: ${data.scene_data}/COCO/cocotext.v2.val.json
         image_dir: ${data.scene_data}/COCO/train2014/
 
       TextOCR:
-       type: scene
-       label_path: ${data.scene_data}/TextOCR/TextOCR_0.1_val.json
-       image_dir: ${data.scene_data}/TextOCR/train_images/
+        type: scene
+        label_path: ${data.scene_data}/TextOCR/TextOCR_0.1_val.json
+        image_dir: ${data.scene_data}/TextOCR/train_images/
 
 model:
   source: raw
@@ -103,20 +102,20 @@ model:
     pad_token: " "
     unk_token: " "
     model_max_length: 20
-  char_embedder: 
+  char_embedder:
     vocab_size: 95 # by default
     embedding_dim: 32
     max_length: 20
     padding_idx: 0
     attention_head_dim: 2
   unet:
-    attention_head_dim: {"text": 8, "char": 2}
-    cross_attention_dim: {"text": 768, "char": 32}
+    attention_head_dim: { "text": 8, "char": 2 }
+    cross_attention_dim: { "text": 768, "char": 32 }
   noise_scheduler: diffusers.DDIMScheduler
 
 lightning:
-  logger: 
-  callbacks: 
+  logger:
+  callbacks:
     checkpoint_callback:
       params:
         save_top_k: -1
@@ -133,8 +132,8 @@ lightning:
           num_sample_per_image: 3
           guidance_scale: 7.5
           seed: 42
-    
-    # NOTE: Download pretrained ABINet model from https://github.com/FangShancheng/ABINet.git and 
+
+    # NOTE: Download pretrained ABINet model from https://github.com/FangShancheng/ABINet.git and
     #       put model checkpoints in checkpoints/abinet to use this callback
     # ocracc_logger:
     #   target: "src.trainers.OCRAccLogger"
