@@ -17,7 +17,7 @@ def create_parser():
     parser.add_argument("--ckpt_path", type=str, required=True)
     parser.add_argument("--in_image", type=str, required=True)
     parser.add_argument("--in_mask", type=str, required=True)
-    parser.add_argument("--out_dir", default="output")
+    parser.add_argument("--output_dir", default="output")
     parser.add_argument("--text", type=str)
     parser.add_argument("--font", type=str, default="")
     parser.add_argument("--color", type=str, default="")
