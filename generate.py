@@ -17,20 +17,19 @@ def create_parser():
     parser.add_argument("--ckpt_path", type=str, required=True)
     parser.add_argument("--in_image", type=str, required=True)
     parser.add_argument("--in_mask", type=str, required=True)
-    parser.add_argument("--output_dir", default="output")
+    parser.add_argument("--out_dir", default="output")
     parser.add_argument("--text", type=str)
     parser.add_argument("--font", type=str, default="")
     parser.add_argument("--color", type=str, default="")
     parser.add_argument("--instruction", type=str)
     parser.add_argument("--num_inference_steps", default=30)
-    parser.add_argument("--num_sample_per_image", default=1)
+    parser.add_argument("--num_sample_per_image", default=3, type=int)
     parser.add_argument("--guidance_scale", default=7.5, type=float)
     parser.add_argument("--no_cuda", action="store_true")
     return parser
 
 
 def main(opt):
-    seed_everything(opt.seed)
     model = CharInpaintTrainer.load_from_checkpoint(opt.ckpt_path)
     device = "cpu" if opt.no_cuda else "cuda"
     model = model.to(device)
@@ -49,7 +48,8 @@ def main(opt):
         color = opt.color
         font = opt.font
         style = prepare_style_chars(char, [font, color])
-
+    
+    torch.manual_seed(opt.seed)
     batch = {
         "image": torch.from_numpy(raw_image).unsqueeze(0).to(device),
         "mask": torch.from_numpy(mask).unsqueeze(0).to(device),

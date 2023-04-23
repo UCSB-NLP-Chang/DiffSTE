@@ -68,6 +68,8 @@ def prepare_style_chars(chars, style):
     else:
         if style[0] != "":
             style[0] = re.sub(r'\[.*?\]', '', style[0])
+        if "and" in style[0]: # emphasize font combination
+            return f"in font: {style[0]}"
         if style[0] != "" and style[1] != "":  # font and color
             return "Write \"" + chars + f"\" in font: {style[0]} and color: {style[1]}"
         if style[0] == "" and style[1] != "":  # only color

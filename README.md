@@ -71,7 +71,7 @@ Mix two different font styles.
 ```bash
 python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font Allura --output_dir ${output_dir}
 python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font Mohave --output_dir ${output_dir}
-python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font Allura and Mohave --output_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font "Allura and Mohave" --output_dir ${output_dir}
 ```
 
 You should be able to get similar results:
