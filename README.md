@@ -13,16 +13,24 @@
 This is the official implementation of the paper "Improving Diffusion Models for Scene Text Editing with Dual Encoders" \[[Arxiv](https://arxiv.org/abs/2304.05568)\].
 
 ## Overview
-In this work, we propose a novel Diffusion-based Scene Text Editing (DiffSTE) framework, which is able to edit scene text into different font styles and colors following given text instruction. Specifically, we propose to improve pre-trained diffusion models with a dual encoder design, which includes a character encoder for better text legibility and an instruction encoder for better style control. We then utilize an instruction tuning framework to train our model learn the mapping from the text instruction to the corresponding image with either the specified style or the style of the surrounding texts in the background. 
-Such a training method further brings our model the zero-shot generalization ability to the following three scenarios:
-generating text with unseen font variation, e.g. italic and bold,
-mixing different fonts to construct a new font, 
+In this work, we propose a novel Diffusion-based Scene Text Editing (DiffSTE) framework, which is able to edit scene text into different font styles and colors following given text instruction. Specifically, we propose to improve pre-trained diffusion models with a dual encoder design, which includes a character encoder for better text legibility and an instruction encoder for better style control. We then utilize an instruction tuning framework to train our model learn the mapping from the text instruction to the corresponding image with either the specified style or the style of the surrounding texts in the background. Such a training method further brings our model the zero-shot generalization ability to the following three scenarios: generating text with unseen font variation, e.g. italic and bold, mixing different fonts to construct a new font, 
 and using more relaxed forms of natural language as the instructions to guide the generation task.
+
+## Quick Start
+Assuming conda has already installed, you could use the following commands to try our model for a quick start.
+```bash
+conda create -n diffste python=3.8
+conda activate diffste
+pip install -r requirements.txt
+gdown https://drive.google.com/uc?id=1fc0RKGWo6MPSJIZNIA_UweTOPai64S9f
+python generate.py --ckpt_path diffste.ckpt --in_image examples/sample0.png --in_mask examples/mask0.png --text wizards --out_dir ./
+```
 
 ## Requirements
 Build the environment with the following command:
 ```bash
 conda create -n diffste python=3.8
+conda activate diffste
 pip install -r requirements.txt
 ```
 Our pretrained model can be downloaded from [here](https://drive.google.com/file/d/1fc0RKGWo6MPSJIZNIA_UweTOPai64S9f/view?usp=share_link).
@@ -32,7 +40,7 @@ Our pretrained model can be downloaded from [here](https://drive.google.com/file
 ### Scene text editing
 Run following command to edit scene text. The mask file indicates the region where the generated text locates.
 ```bash
-python generate.py --ckpt_path ${model_path} --in_image examples/sample0.png --in_mask examples/mask0.png --text wizards --output_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample0.png --in_mask examples/mask0.png --text wizards --out_dir ${output_dir}
 ```
 You should be able to get a similar result:
 
@@ -41,7 +49,7 @@ You should be able to get a similar result:
 ### Specify text style
 Specify the font and color of the generated text by adding `--font` and `--color` arguments.
 ```bash
-python generate.py --ckpt_path ${model_path} --in_image examples/sample1.png --in_mask examples/mask1.png --text five --font Courgette --color red --output_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample1.png --in_mask examples/mask1.png --text five --font Courgette --color red --out_dir ${output_dir}
 ```
 You should be able to get a similar result:
 
@@ -49,7 +57,7 @@ You should be able to get a similar result:
 
 Specify the text style with a natural language instruction.
 ```bash
-python generate.py --ckpt_path ${model_path} --in_image examples/sample2.png --in_mask examples/mask2.png --text STAFF --instruction "The word \"STAFF\" is colored in a delicate, ladylike shade of lilac"" --output_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample2.png --in_mask examples/mask2.png --text STAFF --instruction "The word \"STAFF\" is colored in a delicate, ladylike shade of lilac"" --out_dir ${output_dir}
 ```
 You should be able to get a similar result:
 
@@ -58,10 +66,10 @@ You should be able to get a similar result:
 ### Font variation
 Generate text with unseen font variation, e.g. italic and bold. Notice that NovaMono font has no italic and bold version from google-fonts library.
 ```bash
-python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono --output_dir ${output_dir}
-python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono-Italic --output_dir ${output_dir}
-python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono-Bold --output_dir ${output_dir}
-python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono-BoldItalic --output_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono --out_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono-Italic --out_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono-Bold --out_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample3.png --in_mask examples/mask3.png --text STATION --font NovaMono-BoldItalic --out_dir ${output_dir}
 ```
 You should be able to get similar results:
 
@@ -69,9 +77,9 @@ You should be able to get similar results:
 
 Mix two different font styles.
 ```bash
-python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font Allura --output_dir ${output_dir}
-python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font Mohave --output_dir ${output_dir}
-python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font "Allura and Mohave" --output_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font Allura --out_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font Mohave --out_dir ${output_dir}
+python generate.py --ckpt_path ${model_path} --in_image examples/sample4.png --text Reload --font "Allura and Mohave" --out_dir ${output_dir}
 ```
 
 You should be able to get similar results:
